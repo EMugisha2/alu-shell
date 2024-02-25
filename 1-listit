@@ -1,3 +1,0 @@
-#!/bin/bash
-alushelldirectory="/alu-shell"
-ls -d "$alushelldirectory/basics"/*
