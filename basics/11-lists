@@ -1,0 +1,2 @@
+#!/bin/bash
+ls -la "$(dirname"$0")" "$(dirname "$(dirname "$0")")" /boot
