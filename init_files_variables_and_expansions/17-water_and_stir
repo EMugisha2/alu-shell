@@ -1,2 +1,76 @@
 #!/bin/bash
-echo $(printf %o $(($((5#$(echo $WATER | tr 'water' '01234'))) + $((5#$(echo $STIR | tr 'stir.' '01234'))))) | tr '01234567' 'bestchol')
+
+# Function to convert a string to a number using a base
+# This function takes two arguments: the string to convert and the base
+to_base10() {
+    local str="$1"
+    local base="$2"
+    local result=0
+    local len=${#str}
+    
+    # Loop through each character in the string
+    for ((i=0; i<len; i++)); do
+        local char="${str:i:1}"
+        local digit
+        
+        # Convert the character to a digit
+        case "$char" in
+            "w") digit=0 ;;
+            "a") digit=1 ;;
+            "t") digit=2 ;;
+            "e") digit=3 ;;
+            "r") digit=4 ;;
+            ".") digit=5 ;;
+        esac
+        
+        # Add the digit to the result
+        result=$((result * base + digit))
+    done
+    
+    echo "$result"
+}
+
+# Function to convert a number to a string using a base
+# This function takes two arguments: the number to convert and the base
+to_baseX() {
+    local num="$1"
+    local base="$2"
+    local result=""
+    
+    # Convert the number to the specified base
+    while [[ "$num" -gt 0 ]]; do
+        local digit=$((num % base))
+        local char
+        
+        # Convert the digit to a character
+        case "$digit" in
+            0) char="b" ;;
+            1) char="e" ;;
+            2) char="s" ;;
+            3) char="t" ;;
+            4) char="c" ;;
+            5) char="h" ;;
+            *) char="o" ;;
+        esac
+        
+        # Prepend the character to the result
+        result="$char$result"
+        
+        # Divide the number by the base
+        num=$((num / base))
+    done
+    
+    echo "$result"
+}
+
+# Main code
+WATER="water"
+STIR="stir."
+
+water_number=$(to_base10 "$WATER" 5)
+stir_number=$(to_base10 "$STIR" 5)
+sum=$((water_number + stir_number))
+
+result=$(to_baseX "$sum" 8)
+echo "$result"
+
